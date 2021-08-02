@@ -1,55 +1,42 @@
 <template>
   <div class="app">
-
-    <form action="">
-      <h4>Создание поста</h4>
-      <input
-          v-bind:value="title"
-          @input="title = $event.target.value"
-          class="input"
-          type="text"
-          placeholder="Название"
-      >
-      <input
-          v-bind:value="body"
-          @input="body = $event.target.value"
-          class="input"
-          type="text"
-          placeholder="Описание"
-      >
-      <button
-          class="btn"
-          @click="createPost"
-      >
-        Создать
-      </button>
-    </form>
-
-    <div class="post" v-for="post in posts">
-      <div><strong>Название:</strong> {{ post.title }}</div>
-      <div><strong>Описание:</strong> {{ post.body }}</div>
-    </div>
+    <post-form
+        @create="createPost"
+    />
+    <post-list
+        :posts="posts"
+        @remove="removePost"
+    >
+    </post-list>
   </div>
 </template>
 
 <script>
+import PostForm from "@/components/PostForm"
+import PostList from "@/components/PostList";
+
+
 export default {
+  components: {
+    PostList, PostForm
+  },
   data() {
     return {
       posts: [
         {id: 1, title: 'Javascript', body: 'Описание поста'},
         {id: 2, title: 'Javascript 2', body: 'Описание поста 2'},
         {id: 3, title: 'Javascript 3', body: 'Описание поста 3'},
-        {id: 3, title: 'Javascript 4', body: 'Описание поста 4'}
+        {id: 4, title: 'Javascript 4', body: 'Описание поста 4'}
       ],
-      title: '',
-      body: ''
     }
   },
   methods: {
-    createPost() {
-      // Create post comment
+    createPost(post, second) {
+      this.posts.push(post)
     },
+    removePost(post) {
+      this.posts = this.posts.filter(p => p.id !== post.id)
+    }
   }
 }
 </script>
@@ -65,32 +52,9 @@ export default {
   padding: 20px;
 }
 
-.post {
-  margin-top: 15px;
-  padding: 15px;
-  border: 2px solid teal;
-}
-
 form {
   display: flex;
   flex-direction: column;
-}
-
-.input {
-  width: 100%;
-  border: 1px solid teal;
-  padding: 10px 15px;
-  margin-top: 10px;
-}
-
-.btn {
-  margin-top: 15px;
-  align-self: flex-end;
-  padding: 10px 15px;
-  background-color: transparent;
-  color: teal;
-  border: 1px solid teal;
-  cursor: pointer;
 }
 
 </style>
